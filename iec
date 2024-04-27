@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,3 +42,208 @@ int main(){
     while(s!=10){
       printf("\nQuantidade de produtos cadastrados [%i]\n", *w);
       printf("\n1-Inserir Produto\n2-Apresentar produto\n3-Apresentar todos os produtos\n4-Balanço\n5-Busca por nome\n6-Busca por setor\n7-Venda\n8-Carregar produtos por arquivo\n9-Gerar arquivo de produtos\n10-Sair\n");
+      setbuf(stdin,NULL);
+      scanf("%i", &s);
+      switch(s){
+        case 1:
+          cadastrar(produtos, k, vet, w);
+          (*w)++;
+            break;
+        case 2:
+          if(w!=0){
+            printf("Nenhum produto cadastrado\n");
+          }
+          else{
+          printf("Qual produto deseja apresentar(de 0 até %i)? ",*w-1);
+          setbuf(stdin,NULL);
+          scanf("%i", &l);
+          VerProduto(produtos, l, vet);
+          }
+            break;
+        case 3:
+          if(*w==0){
+            printf("Nenhum produto cadastrado\n");
+          }
+          else{
+          Todosprodutos(produtos, *w, vet);
+      }
+            break;
+        case 4:
+            printf("O balanço de produtos é: %i",balanco(produtos, *w));
+            break;
+        case 5:
+            nome(produtos, *w, vet);
+            break;
+        case 6:
+            setor(produtos, *w, vet);
+            break;
+        case 7:
+          vender(produtos, *w, vet);
+           break;
+        case 9:
+          escreverArc(produtos, *w);
+           break;
+        case 8: 
+          k=lerArc(produtos, k, w);
+           break;
+          }
+  }
+  return 0;
+}
+
+void cadastrar(produto *produtos, int k, char **vet, int *w){
+    while(*w<=k)
+    if(k>0){
+      printf("Qual o nome do item?: ");
+      fgets(produtos[*w].nome,16,stdin);
+      for(int i=0;i<16;i++){
+        produtos[*w].nome[i]=tolower(produtos[*w].nome[i]);     
+      }
+      printf("Qual o setor do item, insira o número correspondente?: ");
+      for(int st=açougue;st<=cereais;st++){
+        printf("\n%i-%s ",st, vet[st]);
+      }
+      printf(" \n-");
+      setbuf(stdin,NULL);
+      scanf("%i", &produtos[*w].setor);
+      printf("Qual a quantidade do item?: ");
+      setbuf(stdin,NULL);
+      scanf("%i", &produtos[*w].quantidade);
+      printf("Qual o preço do item?: ");
+      setbuf(stdin,NULL);
+      scanf("%f", &produtos[*w].preço);
+      break;
+    }
+    if(*w==k){
+    printf("\nTodos os produtos cadastrados\n");
+    }
+}
+void VerProduto(produto *produtos, int l, char **vet){
+  printf("Produto: %s\n Setor: %s\n Quantidade: %i\n Preço: %f\n",produtos[l].nome,vet[produtos[l].setor],produtos[l].quantidade,produtos[l].preço);
+}
+
+void Todosprodutos(produto *produtos, int k, char **vet){
+  for(int i=0;i<k;i++){
+    VerProduto(produtos, i, vet);
+  }
+}
+void vender(produto *produtos, int k, char **vet){
+  int q,j=0;
+  printf("Produtos disponíveis\n");
+  Todosprodutos(produtos, k, vet);
+  printf("Qual produto deseja vender? ");
+  char nome[16];
+  fgets(nome,16,stdin);
+  for(int i=0; i<16;i++){
+  nome[i]=tolower(nome[i]);
+  }
+  for(int i=0;i<k;i++){
+    if(strcmp(produtos[i].nome,nome)==0){
+      while(j==0){
+      printf("Qual a quantidade desejada? ");
+        setbuf(stdin,NULL);
+      scanf("%i", &q);
+      if((produtos[i].quantidade-q)<0){
+        printf("Quantidade indisponível, por favor digite uma nova quantidade");
+      }
+      else{
+        produtos[i].quantidade-=q;
+        printf("Venda realizada");
+        j++;
+      }
+      }
+    }
+  }
+}
+
+void nome(produto *produtos, int k, char **vet){
+  char nome[16];
+  int j=0;
+  printf("\nDigite o nome do produto: ");
+  fgets(nome,16,stdin);
+  for(int i=0; i<16;i++){
+  nome[i]=tolower(nome[i]);
+  }
+  for(int i=0;i<k;i++){
+    if(strcmp(produtos[i].nome,nome)==0){
+      VerProduto(produtos, i, vet);
+      j++;
+      return;
+    }
+  }
+  if(j==0){
+  printf("Nome não encontrado\n");
+  }
+  };
+
+void setor(produto *produtos, int k, char **vet){
+  int t=0;
+  int setor;
+    printf("Qual o setor desejado desejado?, digite o número correspondente ao setor \n");
+    for(int st=açougue;st<=cereais;st++){
+      printf("%i-%s\n ",st, vet[st]);
+    }
+  setbuf(stdin,NULL);
+    scanf("%i", &setor);
+    for(int i=0; i<k; i++){
+     if(produtos[i].setor==setor){
+       VerProduto(produtos,i, vet);
+       t++;
+    }
+    }
+    if(t==0){
+      printf("Setor não encontrado");
+    }  
+}
+int balanco(produto *produtos, int k){
+  int total=0;
+  if(k>0){
+    total=produtos[k-1].quantidade;
+    return(total+balanco(produtos,k-1));
+  }
+  else{
+    return 0;
+  }
+}
+void escreverArc(produto *produtos, int k){
+  FILE *arquivo;
+  char aux[5];
+  arquivo=fopen("saída.txt", "w");
+  if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo!\n");
+        return;
+  }
+  sprintf(aux,"%i",k);
+  fputs(aux,arquivo);
+  for(int i=0; i<k;i++){
+  fputs(produtos[i].nome,arquivo);   sprintf(aux,"%i",produtos[i].setor);
+  fputs(aux,arquivo);
+ sprintf(aux,"%i",produtos[i].quantidade);
+  fputs(aux,arquivo);
+   sprintf(aux,"%.2f",produtos[i].preço);
+    fputs(aux,arquivo);
+  }
+fclose(arquivo);
+}
+
+int lerArc(produto *produtos, int k, int *w){
+  FILE *arquivo;
+  char aux[5];
+  arquivo=fopen("saída.txt", "w");
+  if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo!\n");
+        return 0;
+  }
+fgets(aux,4,arquivo);
+k=atoi(aux);
+for(int i=0;i<k;i++){
+  fgets(produtos[i].nome, 16, arquivo);
+  fgets(aux,4,arquivo);
+produtos[i].setor=atoi(aux);
+  fgets(aux,4,arquivo);
+  produtos[i].quantidade=atoi(aux);
+  fgets(aux,4,arquivo);
+  produtos[i].preço=atof(aux);
+}
+return (k);
+}
