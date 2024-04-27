@@ -1,1 +1,45 @@
-q
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+enum setores{açougue,bebidas,higiene,limpeza,hortifruti,padaria,cereais};
+typedef struct{
+    char nome[16];
+    enum setores setor;
+    int quantidade;
+    float preço;
+}produto;
+
+int lerArc(produto *produtos, int k, int *w);
+void escreverArc(produto *produtos, int k);
+void cadastrar(produto *produtos, int k, char **vet, int *w);
+void VerProduto(produto *produtos, int l, char **vet);
+void Todosprodutos(produto *produtos, int k, char **vet);
+void vender(produto *produtos, int k, char **vet);
+void nome(produto *produtos, int k, char **vet);
+void setor(produto *produtos, int k, char **vet);
+int balanco(produto *produtos, int k);
+
+int main(){
+    char **vet;
+    vet=(char**)malloc(sizeof(char*)*7);
+    for(int i=0;i<7;i++){
+        vet[i]=malloc(sizeof(char)*12);
+    }
+  char vet1[7][12] = {"açougue", "bebidas", "higiene", "limpeza", "hortifruti", "padaria", "cereais"};
+
+  for (int i = 0; i < 7; i++) {
+      strcpy(vet[i], vet1[i]);
+  }
+    int s=0,k,l;
+    printf("Informe a quantidade de produtos a serem castrados: ");
+    setbuf(stdin,NULL);
+    scanf("%i", &k);
+    produto *produtos;
+    produtos=(produto*)malloc(sizeof(produto)*k);
+    int *w=(int* )malloc(sizeof(int));
+    *w=0;
+    while(s!=10){
+      printf("\nQuantidade de produtos cadastrados [%i]\n", *w);
+      printf("\n1-Inserir Produto\n2-Apresentar produto\n3-Apresentar todos os produtos\n4-Balanço\n5-Busca por nome\n6-Busca por setor\n7-Venda\n8-Carregar produtos por arquivo\n9-Gerar arquivo de produtos\n10-Sair\n");
