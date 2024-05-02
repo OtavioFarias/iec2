@@ -3,6 +3,28 @@
 #include <string.h>
 #include "musica.h"
 
+musica* cadastrar(){
+	musica *musicas=(musica *)malloc(sizeof(musica));
+	printf("\nQual o título da música? ");
+	setbuf(stdin,NULL);
+	fgets(musicas->titulo,256,stdin);
+	printf("\nQual o artista? ");
+	setbuf(stdin,NULL);
+	fgets(musicas->artista,256,stdin);
+	printf("\nQual a letra da música? ");
+	setbuf(stdin,NULL);
+	setbuf(stdin,NULL);
+	fgets(musicas->letra,256,stdin);
+	printf("Qual o código da música? ");
+	setbuf(stdin,NULL);
+	setbuf(stdin,NULL);
+	scanf("%i", &musicas->codigo);
+	printf("Qual o número de execuções da música? ");
+	setbuf(stdin,NULL);
+	scanf("%i", &musicas->execucoes);
+	return (musicas);
+	}
+
 nodo_LSE* criaNodo(musica *dados){
 	nodo_LSE *novoElemento = (nodo_LSE *)malloc(sizeof(nodo_LSE));
 	novoElemento->info = dados;
@@ -16,38 +38,6 @@ desc_LSE* criaDescritor(){
 	novoDescLista->LSE=NULL;
 	return novoDescLista;
 }
-
-
-/*void removeLista(desc_LSE *minhaLista, int posicao){
-	if((minhaLista->tamanho ==0)||(posicao > minhaLista->tamanho)){
-		printf("posicao não existe OU LISTA VAZIA!\n");
-		return NULL;
-	}
-	else{
-		if(posicao==0){ 
-			nodo *aux = minhaLista->LSE;
-			minhaLista->LSE = minhaLista->LSE->prox;
-			minhaLista->tamanho--;
-			return aux; 
-		}
-		else{ 
-			int listaPos=0;
-			nodo *anterior;
-			nodo *aux = minhaLista->LSE;
-			while(aux != NULL){
-				anterior = aux;
-				aux = aux->prox;
-				listaPos++;
-				if(listaPos == posicao){
-					anterior->prox = aux->prox;
-					minhaLista->tamanho--;
-					return aux;
-				}
-			}	
-		}
-	}
-}
-*/
 
 void insere(desc_LSE *minhaLista, nodo_LSE *novoElemento, int posicao){
 	if((minhaLista->LSE == NULL)||(posicao == 0)){
@@ -103,11 +93,128 @@ void insere(desc_LSE *minhaLista, nodo_LSE *novoElemento, int posicao){
 }
 */
 
-void imprime(desc_LSE *minhaLista){
-	nodo_LSE aux = minhaLista->LSE;
+void imprime(desc_LSE *minhaLista){ 
+	int p=0;
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
 	while(aux != NULL){
-		printf("[%d] ", aux->dado);
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ", p,aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
 		aux = aux->prox;
+		p++;
 	}
 	printf("\n");
 }
+
+nodo_LSE* removeLista(desc_LSE *minhaLista, int posicao){
+	nodo_LSE *aux=(nodo_LSE *)malloc(sizeof(nodo_LSE));
+	if((minhaLista->tamanho ==0)||(posicao > minhaLista->tamanho)){
+		printf("posicao não existe OU LISTA VAZIA!\n");
+	}
+	else{
+		if(posicao==0){ 
+			aux = minhaLista->LSE;
+			minhaLista->LSE = minhaLista->LSE->prox;
+			minhaLista->tamanho--;
+			return aux; 
+		}
+		else{ 
+			int listaPos=0;
+			nodo_LSE *anterior;
+			aux = minhaLista->LSE;
+			while(aux != NULL){
+				anterior = aux;
+				aux = aux->prox;
+				listaPos++;
+				if(listaPos == posicao){
+					anterior->prox = aux->prox;
+					minhaLista->tamanho--;
+					return aux;
+				}
+			}	
+		}
+	}
+ return aux;
+}
+
+void conExecucoes(desc_LSE *minhaLista, int execucoes){
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
+	int p=0;
+	while(aux != NULL){
+		if(execucoes==aux->info->execucoes){
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ",p, aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
+		}
+		aux = aux->prox;
+	p++;
+	}
+	printf("\n");
+}
+
+void conCodigo(desc_LSE *minhaLista, int codigo){
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
+	int p=0;
+	while(aux != NULL){
+		if(codigo==aux->info->codigo){
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ",p, aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
+		}
+		aux = aux->prox;
+	p++;
+	}
+printf("\n");
+}
+
+void conTitulo(desc_LSE *minhaLista, char *titulo){
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
+	int p=0;
+	while(aux != NULL){
+		if(strcmp(titulo,aux->info->titulo)==0){
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ",p, aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
+		}
+		aux = aux->prox;
+	p++;
+	}
+printf("\n");
+}
+
+void conArtista(desc_LSE *minhaLista, char *artista){
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
+	int p=0;
+	while(aux != NULL){
+		if(strcmp(artista,aux->info->artista)==0){
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ",p, aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
+		}
+		aux = aux->prox;
+	p++;
+	}
+printf("\n");
+}
+
+void conLetra(desc_LSE *minhaLista, char *letra){
+	nodo_LSE *aux = (nodo_LSE *)malloc(sizeof(nodo_LSE));
+	aux = minhaLista->LSE;
+	int p=0;
+	while(aux != NULL){
+		if(strcmp(letra,aux->info->letra)==0){
+		printf("|==============================|");
+		printf("\n Posição [%i]\n Título: %s\n Artista: %s\n Letra: %s\n Código: %i\n Execuções: %i\n ",p, aux->info->titulo, aux->info->artista, aux->info->letra, aux->info->codigo, aux->info->execucoes);
+		printf("|==============================|\n");
+		}
+		aux = aux->prox;
+	p++;
+	}
+printf("\n");
+}
+

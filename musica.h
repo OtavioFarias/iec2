@@ -26,24 +26,24 @@ desc_LSE* criaDescritor();
 
 void insere(desc_LSE *minhaLista, nodo_LSE *novoElemento, int posicao);
 
+musica* cadastrar();
+
 void imprime(desc_LSE *minhaLista);
 
-/*desc_LSE * criaDescritor();
- * 
+nodo_LSE* removeLista(desc_LSE *minhaLista, int posicao);
 
-nodo* criaNodo(int novoDado);
-
-desc_LSE * criaDescritor();
-
-void removeLista(desc_LSE *minhaLista, int posicao);
-
+/*
 void insere(desc_LSE *minhaLista, nodo *novo_elemento, int posicao);
 
 int tamanho(desc_LSE *minhaLista);
 
 void libera(desc_LSE *minhaLista);
-
-void imprime(desc_LSE *minhaLista);
 */
+
+void conExecucoes(desc_LSE *minhaLista, int execucoes);
+void conCodigo(desc_LSE *minhaLista, int execucoes);
+void conTitulo(desc_LSE *minhaLista, char *titulo);
+void conArtista(desc_LSE *minhaLista, char *artista);
+void conLetra(desc_LSE *minhaLista, char *letra);
 
 #endif
